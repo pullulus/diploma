@@ -21,6 +21,7 @@ public class BuyWithCreditPage {
     private SelenideElement errorMessageAboutWrongFormat = $(byText("Неверный формат"));
     private SelenideElement errorMessageAboutWrongDateOfExpiry = $(byText("Неверно указан срок действия карты"));
     private SelenideElement errorMessageWithDateOfExpiry = $(byText("Истёк срок действия карты"));
+    private SelenideElement errorMessageBecauseOfEmptyField = $(byText("Поле обязательно для заполнения"));
 
     public BuyWithCreditPage() {
         heading.shouldBe(Condition.visible);
@@ -71,6 +72,10 @@ public class BuyWithCreditPage {
         continueButton.click();
     }
 
+    public void emptyFields() {
+        continueButton.click();
+    }
+
     public void getSuccessMessage() {
         successMessage.waitUntil(Condition.visible, 15000);
     }
@@ -89,5 +94,9 @@ public class BuyWithCreditPage {
 
     public void getErrorMessageWithDateOfExpiry() {
         errorMessageWithDateOfExpiry.waitUntil(Condition.visible, 5000);
+    }
+
+    public void getErrorMessageBecauseOfEmptyField() {
+        errorMessageBecauseOfEmptyField.waitUntil(Condition.visible, 10000);
     }
 }

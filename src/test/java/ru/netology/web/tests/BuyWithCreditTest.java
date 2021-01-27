@@ -217,5 +217,17 @@ public class BuyWithCreditTest {
         buyWithCreditPage.withoutCardValidationCode(cvc);
         buyWithCreditPage.getErrorMessageAboutWrongFormat();
     }
+
+    @Test
+    void shouldNotSellWhenAllFieldsAreEmpty() {
+        val startingPage = new StartingPage();
+        val buyWithCreditPage = startingPage.buyWithCredit();
+        buyWithCreditPage.emptyFields();
+        buyWithCreditPage.getErrorMessageAboutWrongFormat();
+        buyWithCreditPage.getErrorMessageAboutWrongFormat();
+        buyWithCreditPage.getErrorMessageAboutWrongFormat();
+        buyWithCreditPage.getErrorMessageBecauseOfEmptyField();
+        buyWithCreditPage.getErrorMessageAboutWrongFormat();
+    }
 }
 
