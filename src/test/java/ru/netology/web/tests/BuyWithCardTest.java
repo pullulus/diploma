@@ -3,11 +3,9 @@ package ru.netology.web.tests;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import lombok.val;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ru.netology.web.data.DataHelper;
+import ru.netology.web.mysql.Request;
 import ru.netology.web.pages.StartingPage;
 
 import static com.codeborne.selenide.Selenide.open;
@@ -29,13 +27,20 @@ public class BuyWithCardTest {
         open("http://localhost:8080");
     }
 
+    @AfterEach
+    void shouldClearAll() {
+        Request.shouldDeleteAfterPayment();
+    }
+
     @Test
     void shouldBuySuccessfullyWithApprovedCard() {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val number = DataHelper.getApprovedCardNumber();
-        buyWithCardPage.withoutCardNumber(number);
-        buyWithCardPage.getSuccessMessage();
+        buyWithCardPage.withCardNumber(number);
+        buyWithCardPage.waitSuccessMessage();
+        val info = Request.getPaymentInfo();
+        System.out.println(info);
     }
 
     @Test
@@ -43,8 +48,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val number = DataHelper.getDeclinedCardNumber();
-        buyWithCardPage.withoutCardNumber(number);
-        buyWithCardPage.getErrorMessage();
+        buyWithCardPage.withCardNumber(number);
+        buyWithCardPage.waitErrorMessage();
     }
 
     @Test
@@ -52,8 +57,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val number = "0000 0000 0000 0000";
-        buyWithCardPage.withoutCardNumber(number);
-        buyWithCardPage.getErrorMessage();
+        buyWithCardPage.withCardNumber(number);
+        buyWithCardPage.waitErrorMessage();
     }
 
     @Test
@@ -61,8 +66,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val number = "5467 7398 2231 4567";
-        buyWithCardPage.withoutCardNumber(number);
-        buyWithCardPage.getErrorMessage();
+        buyWithCardPage.withCardNumber(number);
+        buyWithCardPage.waitErrorMessage();
     }
 
     @Test
@@ -70,8 +75,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val number = "4567 3274 3100 04";
-        buyWithCardPage.withoutCardNumber(number);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardNumber(number);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -79,8 +84,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val monthNumber = "00";
-        buyWithCardPage.withoutMonth(monthNumber);
-        buyWithCardPage.getErrorMessageAboutWrongDateOfExpiry();
+        buyWithCardPage.withMonth(monthNumber);
+        buyWithCardPage.waitErrorMessageAboutWrongDateOfExpiry();
     }
 
     @Test
@@ -88,8 +93,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val monthNumber = "5";
-        buyWithCardPage.withoutMonth(monthNumber);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withMonth(monthNumber);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -97,8 +102,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val monthNumber = "24";
-        buyWithCardPage.withoutMonth(monthNumber);
-        buyWithCardPage.getErrorMessageAboutWrongDateOfExpiry();
+        buyWithCardPage.withMonth(monthNumber);
+        buyWithCardPage.waitErrorMessageAboutWrongDateOfExpiry();
     }
 
     @Test
@@ -106,8 +111,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val yearNumber = "00";
-        buyWithCardPage.withoutYear(yearNumber);
-        buyWithCardPage.getErrorMessageWithDateOfExpiry();
+        buyWithCardPage.withYear(yearNumber);
+        buyWithCardPage.waitErrorMessageWithDateOfExpiry();
     }
 
     @Test
@@ -115,8 +120,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val yearNumber = "7";
-        buyWithCardPage.withoutYear(yearNumber);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withYear(yearNumber);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -124,8 +129,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val yearNumber = "27";
-        buyWithCardPage.withoutYear(yearNumber);
-        buyWithCardPage.getErrorMessageAboutWrongDateOfExpiry();
+        buyWithCardPage.withYear(yearNumber);
+        buyWithCardPage.waitErrorMessageAboutWrongDateOfExpiry();
     }
 
     @Test
@@ -133,8 +138,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val yearNumber = "20";
-        buyWithCardPage.withoutYear(yearNumber);
-        buyWithCardPage.getErrorMessageWithDateOfExpiry();
+        buyWithCardPage.withYear(yearNumber);
+        buyWithCardPage.waitErrorMessageWithDateOfExpiry();
     }
 
     @Test
@@ -142,8 +147,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val nameOfCardHolder = DataHelper.getOnlyUsersFirstName();
-        buyWithCardPage.withoutCardholder(nameOfCardHolder);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardholder(nameOfCardHolder);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -151,8 +156,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val nameOfCardHolder = DataHelper.getOnlyUsersLastName();
-        buyWithCardPage.withoutCardholder(nameOfCardHolder);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardholder(nameOfCardHolder);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -160,8 +165,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val nameOfCardHolder = "L";
-        buyWithCardPage.withoutCardholder(nameOfCardHolder);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardholder(nameOfCardHolder);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -169,8 +174,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val nameOfCardHolder = "LXCVBNMLKJHGFDSAQWERTY NJITRUIOPLKJHGFDSAZXCVBNM";
-        buyWithCardPage.withoutCardholder(nameOfCardHolder);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardholder(nameOfCardHolder);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -178,8 +183,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val nameOfCardHolder = DataHelper.getFullUsersNameInLowcaseLetters();
-        buyWithCardPage.withoutCardholder(nameOfCardHolder);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardholder(nameOfCardHolder);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -187,8 +192,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val nameOfCardHolder = DataHelper.getFullUsersNameInUppercaseAndLowcaseLetters();
-        buyWithCardPage.withoutCardholder(nameOfCardHolder);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardholder(nameOfCardHolder);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -196,8 +201,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val nameOfCardHolder = DataHelper.getFullUsersNameInRussian("ru");
-        buyWithCardPage.withoutCardholder(nameOfCardHolder);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardholder(nameOfCardHolder);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -205,8 +210,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val cvc = "87";
-        buyWithCardPage.withoutCardValidationCode(cvc);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardValidationCode(cvc);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -214,8 +219,8 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val cvc = "3";
-        buyWithCardPage.withoutCardValidationCode(cvc);
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.withCardValidationCode(cvc);
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 
     @Test
@@ -223,10 +228,10 @@ public class BuyWithCardTest {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         buyWithCardPage.emptyFields();
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
-        buyWithCardPage.getErrorMessageBecauseOfEmptyField();
-        buyWithCardPage.getErrorMessageAboutWrongFormat();
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
+        buyWithCardPage.waitErrorMessageBecauseOfEmptyField();
+        buyWithCardPage.waitErrorMessageAboutWrongFormat();
     }
 }

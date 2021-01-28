@@ -27,7 +27,7 @@ public class BuyWithCreditPage {
         heading.shouldBe(Condition.visible);
     }
 
-    public void withoutCardNumber(String number) {
+    public void withCardNumber(String number) {
         cardNumber.setValue(number);
         month.setValue(DataHelper.generateMonthNumber());
         year.setValue(DataHelper.generateYearNumber());
@@ -36,7 +36,7 @@ public class BuyWithCreditPage {
         continueButton.click();
     }
 
-    public void withoutMonth(String monthNumber) {
+    public void withMonth(String monthNumber) {
         cardNumber.setValue(DataHelper.getApprovedCardNumber());
         month.setValue(monthNumber);
         year.setValue(DataHelper.generateYearNumber());
@@ -45,7 +45,7 @@ public class BuyWithCreditPage {
         continueButton.click();
     }
 
-    public void withoutYear(String yearNumber) {
+    public void withYear(String yearNumber) {
         cardNumber.setValue(DataHelper.getApprovedCardNumber());
         month.setValue(DataHelper.generateMonthNumber());
         year.setValue(yearNumber);
@@ -54,7 +54,7 @@ public class BuyWithCreditPage {
         continueButton.click();
     }
 
-    public void withoutCardholder(String nameOfCardholder) {
+    public void withCardholder(String nameOfCardholder) {
         cardNumber.setValue(DataHelper.getApprovedCardNumber());
         month.setValue(DataHelper.generateMonthNumber());
         year.setValue(DataHelper.generateYearNumber());
@@ -63,7 +63,7 @@ public class BuyWithCreditPage {
         continueButton.click();
     }
 
-    public void withoutCardValidationCode(String cvc) {
+    public void withCardValidationCode(String cvc) {
         cardNumber.setValue(DataHelper.getApprovedCardNumber());
         month.setValue(DataHelper.generateMonthNumber());
         year.setValue(DataHelper.generateYearNumber());
@@ -76,27 +76,30 @@ public class BuyWithCreditPage {
         continueButton.click();
     }
 
-    public void getSuccessMessage() {
+    public void waitSuccessMessage() {
+
         successMessage.waitUntil(Condition.visible, 15000);
     }
 
-    public void getErrorMessage() {
+    public void waitErrorMessage() {
+
         errorMessage.waitUntil(Condition.visible, 15000);
     }
 
-    public void getErrorMessageAboutWrongFormat() {
+    public void waitErrorMessageAboutWrongFormat() {
+
         errorMessageAboutWrongFormat.waitUntil(Condition.visible, 5000);
     }
 
-    public void getErrorMessageAboutWrongDateOfExpiry() {
+    public void waitErrorMessageAboutWrongDateOfExpiry() {
         errorMessageAboutWrongDateOfExpiry.waitUntil(Condition.visible, 5000);
     }
 
-    public void getErrorMessageWithDateOfExpiry() {
+    public void waitErrorMessageWithDateOfExpiry() {
         errorMessageWithDateOfExpiry.waitUntil(Condition.visible, 5000);
     }
 
-    public void getErrorMessageBecauseOfEmptyField() {
+    public void waitErrorMessageBecauseOfEmptyField() {
         errorMessageBecauseOfEmptyField.waitUntil(Condition.visible, 10000);
     }
 }
