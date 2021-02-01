@@ -1,16 +1,15 @@
-package ru.netology.web.mysql;
+package ru.netology.web.dbUtils;
 
 import lombok.Value;
 import lombok.val;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Request {
-    public Request() {
+public class DbRequest {
+    public DbRequest() {
     }
 
     @Value
@@ -29,9 +28,8 @@ public class Request {
         try (
                 val conn = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/app", "app", "pass")
-                ) {
-                    val info = runner.query(conn, getInfo, new BeanHandler<>(PaymentInfo.class));
-                    return new PaymentInfo();
+        ) { return runner.query(conn, getInfo, new BeanHandler<>(PaymentInfo.class));
+
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -40,6 +38,7 @@ public class Request {
 
  public static void shouldDeleteAfterPayment() {
         val clearPayment = "DELETE FROM payment_entity";
+        val clearPaymentWithCredit = "DELETE FROM credit_request_entity";
         val clearOrder = "DELETE FROM order_entity";
         val runner = new QueryRunner();
 
@@ -50,6 +49,7 @@ public class Request {
                 ) {
             runner.update(conn, clearOrder);
             runner.update(conn, clearPayment);
+            runner.update(conn, clearPaymentWithCredit);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }

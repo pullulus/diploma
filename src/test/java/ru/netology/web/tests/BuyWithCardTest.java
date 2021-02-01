@@ -5,10 +5,11 @@ import io.qameta.allure.selenide.AllureSelenide;
 import lombok.val;
 import org.junit.jupiter.api.*;
 import ru.netology.web.data.DataHelper;
-import ru.netology.web.mysql.Request;
+import ru.netology.web.dbUtils.DbRequest;
 import ru.netology.web.pages.StartingPage;
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BuyWithCardTest {
 
@@ -27,10 +28,10 @@ public class BuyWithCardTest {
         open("http://localhost:8080");
     }
 
-    @AfterEach
-    void shouldClearAll() {
-        Request.shouldDeleteAfterPayment();
-    }
+//    @AfterEach
+//    void shouldClearAll() {
+//        DbRequest.shouldDeleteAfterPayment();
+//    }
 
     @Test
     void shouldBuySuccessfullyWithApprovedCard() {
@@ -39,8 +40,8 @@ public class BuyWithCardTest {
         val number = DataHelper.getApprovedCardNumber();
         buyWithCardPage.withCardNumber(number);
         buyWithCardPage.waitSuccessMessage();
-        val info = Request.getPaymentInfo();
-        System.out.println(info);
+        val paymentInfo = DbRequest.getPaymentInfo();
+        assertEquals("APPROVED", paymentInfo.getStatus()) ;
     }
 
     @Test
