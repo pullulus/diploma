@@ -12,23 +12,29 @@ public class DbRequest {
     public DbRequest() {
     }
 
-    @Value
-    public static class PaymentInfo {
-        String id;
-        String amount;
-        String created;
-        String status;
-        String transaction_id;
-    }
-
-    public static PaymentInfo getPaymentInfo() {
+    public static PaymentInfoModel getPaymentInfo() {
         val getInfo = "SELECT * FROM payment_entity ORDER BY created DESC LIMIT 1;";
         val runner = new QueryRunner();
 
         try (
                 val conn = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/app", "app", "pass")
-        ) { return runner.query(conn, getInfo, new BeanHandler<>(PaymentInfo.class));
+        ) { return runner.query(conn, getInfo, new BeanHandler<>(PaymentInfoModel.class));
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return null;
+    }
+
+    public static PaymentInfoModel getPaymentWithCreditInfo() {
+        val getInfo = "SELECT * FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
+        val runner = new QueryRunner();
+
+        try (
+                val conn = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/app", "app", "pass")
+        ) { return runner.query(conn, getInfo, new BeanHandler<>(PaymentInfoModel.class));
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();

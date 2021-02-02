@@ -3,14 +3,13 @@ package ru.netology.web.tests;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import lombok.val;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ru.netology.web.data.DataHelper;
+import ru.netology.web.dbUtils.DbRequest;
 import ru.netology.web.pages.StartingPage;
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BuyWithCreditTest {
 
@@ -29,6 +28,11 @@ public class BuyWithCreditTest {
         open("http://localhost:8080");
     }
 
+    @AfterEach
+    void shouldClearAll() {
+        DbRequest.shouldDeleteAfterPayment();
+    }
+
     @Test
     void shouldBuySuccessfullyWithApprovedCard() {
         val startingPage = new StartingPage();
@@ -36,6 +40,8 @@ public class BuyWithCreditTest {
         val number = DataHelper.getApprovedCardNumber();
         buyWithCreditPage.withCardNumber(number);
         buyWithCreditPage.waitSuccessMessage();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("APPROVED", paymentWithCreditInfo.getStatus()) ;
     }
 
     @Test
@@ -45,6 +51,8 @@ public class BuyWithCreditTest {
         val number = DataHelper.getDeclinedCardNumber();
         buyWithCreditPage.withCardNumber(number);
         buyWithCreditPage.waitErrorMessage();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus()) ;
     }
 
     @Test
@@ -54,6 +62,8 @@ public class BuyWithCreditTest {
         val number = "0000 0000 0000 0000";
         buyWithCreditPage.withCardNumber(number);
         buyWithCreditPage.waitErrorMessage();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus()) ;
     }
 
     @Test
@@ -63,6 +73,8 @@ public class BuyWithCreditTest {
         val number = "2334 5698 4531 0076";
         buyWithCreditPage.withCardNumber(number);
         buyWithCreditPage.waitErrorMessage();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus());
     }
 
     @Test
@@ -81,10 +93,12 @@ public class BuyWithCreditTest {
         val monthNumber = "00";
         buyWithCreditPage.withMonth(monthNumber);
         buyWithCreditPage.waitErrorMessageAboutWrongDateOfExpiry();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus()) ;
     }
 
     @Test
-    void shouldNotSellWhenMonthNumberIsShort() {
+    void shouldNotSellWhenMonthNumberIsOneDigitShort() {
         val startingPage = new StartingPage();
         val buyWithCreditPage = startingPage.buyWithCredit();
         val monthNumber = "3";
@@ -129,7 +143,7 @@ public class BuyWithCreditTest {
     }
 
     @Test
-    void shouldNotSellWhenYearNumberLowerThanAllowed() {
+    void shouldNotSellWhenYearNumberIsLowerThanAllowed() {
         val startingPage = new StartingPage();
         val buyWithCreditPage = startingPage.buyWithCredit();
         val yearNumber = "20";
@@ -144,6 +158,8 @@ public class BuyWithCreditTest {
         val nameOfCardHolder = DataHelper.getOnlyUsersFirstName();
         buyWithCreditPage.withCardholder(nameOfCardHolder);
         buyWithCreditPage.waitErrorMessageAboutWrongFormat();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus()) ;
     }
 
     @Test
@@ -153,6 +169,8 @@ public class BuyWithCreditTest {
         val nameOfCardHolder = DataHelper.getOnlyUsersLastName();
         buyWithCreditPage.withCardholder(nameOfCardHolder);
         buyWithCreditPage.waitErrorMessageAboutWrongFormat();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus()) ;
     }
 
     @Test
@@ -162,6 +180,8 @@ public class BuyWithCreditTest {
         val nameOfCardHolder = "N";
         buyWithCreditPage.withCardholder(nameOfCardHolder);
         buyWithCreditPage.waitErrorMessageAboutWrongFormat();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus()) ;
     }
 
     @Test
@@ -171,6 +191,8 @@ public class BuyWithCreditTest {
         val nameOfCardHolder = "QWERTYUIOPASDFGHJKLZXCVBNM PLMNJKOIUHBVGYTFCXDRESZAQW";
         buyWithCreditPage.withCardholder(nameOfCardHolder);
         buyWithCreditPage.waitErrorMessageAboutWrongFormat();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus()) ;
     }
 
     @Test
@@ -180,6 +202,8 @@ public class BuyWithCreditTest {
         val nameOfCardHolder = DataHelper.getFullUsersNameInLowcaseLetters();
         buyWithCreditPage.withCardholder(nameOfCardHolder);
         buyWithCreditPage.waitErrorMessageAboutWrongFormat();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus()) ;
     }
 
     @Test
@@ -188,7 +212,9 @@ public class BuyWithCreditTest {
         val buyWithCreditPage = startingPage.buyWithCredit();
         val nameOfCardHolder = DataHelper.getFullUsersNameInUppercaseAndLowcaseLetters();
         buyWithCreditPage.withCardholder(nameOfCardHolder);
-        buyWithCreditPage.waitErrorMessageAboutWrongFormat();
+       buyWithCreditPage.waitErrorMessageAboutWrongFormat();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus());
     }
 
     @Test
@@ -198,6 +224,8 @@ public class BuyWithCreditTest {
         val nameOfCardHolder = DataHelper.getFullUsersNameInRussian("ru");
         buyWithCreditPage.withCardholder(nameOfCardHolder);
         buyWithCreditPage.waitErrorMessageAboutWrongFormat();
+        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
+        assertEquals("DECLINED", paymentWithCreditInfo.getStatus());
     }
 
     @Test
