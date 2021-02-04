@@ -36,4 +36,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    systemProperty 'database.url', System.getProperty('database.url')
+    systemProperty 'database.name', System.getProperty('database.name')
+    systemProperty 'database.password', System.getProperty('database.password')
 }

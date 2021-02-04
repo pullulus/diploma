@@ -57,7 +57,7 @@ public class BuyWithCardTest {
     }
 
     @Test
-    void shouldNotSellWhenCardNumberIsNulls() {
+    void shouldNotSellWhenCardNumberIsZeros() {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val number = "0000 0000 0000 0000";
@@ -88,14 +88,12 @@ public class BuyWithCardTest {
     }
 
     @Test
-    void shouldNotSellWhenMonthNumberIsNulls() {
+    void shouldNotSellWhenMonthNumberIsZeros() {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val monthNumber = "00";
         buyWithCardPage.withMonth(monthNumber);
         buyWithCardPage.waitErrorMessageAboutWrongDateOfExpiry();
-        val paymentInfo = DbRequest.getPaymentInfo();
-        assertEquals("DECLINED", paymentInfo.getStatus());
     }
 
     @Test
@@ -117,7 +115,7 @@ public class BuyWithCardTest {
     }
 
     @Test
-    void shouldNotSellWhenYearNumberIsNulls() {
+    void shouldNotSellWhenYearNumberIsZeros() {
         val startingPage = new StartingPage();
         val buyWithCardPage = startingPage.buyWithCard();
         val yearNumber = "00";
@@ -159,8 +157,6 @@ public class BuyWithCardTest {
         val nameOfCardHolder = DataHelper.getOnlyUsersFirstName();
         buyWithCardPage.withCardholder(nameOfCardHolder);
         buyWithCardPage.waitErrorMessageAboutWrongFormat();
-        val paymentInfo = DbRequest.getPaymentInfo();
-        assertEquals("DECLINED", paymentInfo.getStatus());
     }
 
     @Test
@@ -170,8 +166,6 @@ public class BuyWithCardTest {
         val nameOfCardHolder = DataHelper.getOnlyUsersLastName();
         buyWithCardPage.withCardholder(nameOfCardHolder);
         buyWithCardPage.waitErrorMessageAboutWrongFormat();
-        val paymentInfo = DbRequest.getPaymentInfo();
-        assertEquals("DECLINED", paymentInfo.getStatus());
     }
 
     @Test
@@ -181,8 +175,6 @@ public class BuyWithCardTest {
         val nameOfCardHolder = "L";
         buyWithCardPage.withCardholder(nameOfCardHolder);
         buyWithCardPage.waitErrorMessageAboutWrongFormat();
-        val paymentInfo = DbRequest.getPaymentInfo();
-        assertEquals("DECLINED", paymentInfo.getStatus());
     }
 
     @Test
@@ -192,8 +184,6 @@ public class BuyWithCardTest {
         val nameOfCardHolder = "LXCVBNMLKJHGFDSAQWERTY NJITRUIOPLKJHGFDSAZXCVBNM";
         buyWithCardPage.withCardholder(nameOfCardHolder);
         buyWithCardPage.waitErrorMessageAboutWrongFormat();
-        val paymentInfo = DbRequest.getPaymentInfo();
-        assertEquals("DECLINED", paymentInfo.getStatus());
     }
 
     @Test
@@ -203,8 +193,6 @@ public class BuyWithCardTest {
         val nameOfCardHolder = DataHelper.getFullUsersNameInLowcaseLetters();
         buyWithCardPage.withCardholder(nameOfCardHolder);
         buyWithCardPage.waitErrorMessageAboutWrongFormat();
-        val paymentInfo = DbRequest.getPaymentInfo();
-        assertEquals("DECLINED", paymentInfo.getStatus());
     }
 
     @Test
@@ -214,8 +202,6 @@ public class BuyWithCardTest {
         val nameOfCardHolder = DataHelper.getFullUsersNameInUppercaseAndLowcaseLetters();
         buyWithCardPage.withCardholder(nameOfCardHolder);
         buyWithCardPage.waitErrorMessageAboutWrongFormat();
-        val paymentInfo = DbRequest.getPaymentInfo();
-        assertEquals("DECLINED", paymentInfo.getStatus());
     }
 
     @Test
@@ -225,8 +211,6 @@ public class BuyWithCardTest {
         val nameOfCardHolder = DataHelper.getFullUsersNameInRussian("ru");
         buyWithCardPage.withCardholder(nameOfCardHolder);
         buyWithCardPage.waitErrorMessageAboutWrongFormat();
-        val paymentInfo = DbRequest.getPaymentInfo();
-        assertEquals("DECLINED", paymentInfo.getStatus());
     }
 
     @Test
