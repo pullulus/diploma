@@ -62,8 +62,6 @@ public class BuyWithCreditTest {
         val number = "0000 0000 0000 0000";
         buyWithCreditPage.withCardNumber(number);
         buyWithCreditPage.waitErrorMessage();
-        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
-        assertEquals("DECLINED", paymentWithCreditInfo.getStatus());
     }
 
     @Test
@@ -73,8 +71,6 @@ public class BuyWithCreditTest {
         val number = "2334 5698 4531 0076";
         buyWithCreditPage.withCardNumber(number);
         buyWithCreditPage.waitErrorMessage();
-        val paymentWithCreditInfo = DbRequest.getPaymentWithCreditInfo();
-        assertEquals("DECLINED", paymentWithCreditInfo.getStatus());
     }
 
     @Test
