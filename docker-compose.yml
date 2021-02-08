@@ -14,6 +14,8 @@ services:
     ports:
       - '5432:5432'
     environment:
+      - POSTGRES_DATABASE=postgres
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=mysecretpassword
   node-app:
     build: ./node-gate-simulator
