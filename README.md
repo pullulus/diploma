@@ -1,6 +1,6 @@
 # diploma
 
-Описание автоматизированных сценариев можно посмотреть здесь - [Plan](https://github.com/pullulus/diploma/tree/master/documents)
+Описание тестовых сценариев, запланированных для автоматизации, можно посмотреть здесь - [Plan](https://github.com/pullulus/diploma/tree/master/documents)
 
 Перед запуском автотестов необходимо убедиться, что на компьютере, где они будут запускаться, установлены Docker Desktop, IntelliJ IDEA и Java 11.
 
