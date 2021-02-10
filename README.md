@@ -16,7 +16,7 @@
 
     _вариант 1_ (с подключением к MySQL) `gradlew test -Ddatabase.url=jdbc:mysql://localhost:3306/app -Ddatabase.name=app -Ddatabase.password=pass`
     
-    _вариант 2_ (с подключением к PostgreSQL) `gradlew test -Ddatabase.url=jdbc:postgresql:localhost:5432/postgres -Ddatabase.name=postgres -Ddatabase.password=mysecretpassword`
+    _вариант 2_ (с подключением к PostgreSQL) `gradlew test -Ddatabase.url=jdbc:postgresql://localhost:5432/postgres -Ddatabase.name=postgres -Ddatabase.password=mysecretpassword`
 
 Отчеты о проделанной работе можно посмотреть здесь - [Report](https://github.com/pullulus/diploma/blob/master/documents/Report.md), [Summary](https://github.com/pullulus/diploma/blob/master/documents/Summary.md) 
 
