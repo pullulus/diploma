@@ -1,6 +1,5 @@
 package ru.netology.web.dbUtils;
 
-import lombok.Value;
 import lombok.val;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -13,13 +12,18 @@ public class DbRequest {
     }
 
     public static PaymentInfoModel getPaymentInfo() {
+        String dbUrl = System.getProperty("database.url");
+        String dbUser = System.getProperty("database.name");
+        String dbPassword = System.getProperty("database.password");
+
         val getInfo = "SELECT * FROM payment_entity ORDER BY created DESC LIMIT 1;";
         val runner = new QueryRunner();
 
         try (
                 val conn = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/app", "app", "pass")
-        ) { return runner.query(conn, getInfo, new BeanHandler<>(PaymentInfoModel.class));
+                        dbUrl, dbUser, dbPassword)
+        ) {
+            return runner.query(conn, getInfo, new BeanHandler<>(PaymentInfoModel.class));
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -28,13 +32,18 @@ public class DbRequest {
     }
 
     public static PaymentInfoModel getPaymentWithCreditInfo() {
+        String dbUrl = System.getProperty("database.url");
+        String dbUser = System.getProperty("database.name");
+        String dbPassword = System.getProperty("database.password");
+
         val getInfo = "SELECT * FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
         val runner = new QueryRunner();
 
         try (
                 val conn = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/app", "app", "pass")
-        ) { return runner.query(conn, getInfo, new BeanHandler<>(PaymentInfoModel.class));
+                        dbUrl, dbUser, dbPassword)
+        ) {
+            return runner.query(conn, getInfo, new BeanHandler<>(PaymentInfoModel.class));
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -42,7 +51,11 @@ public class DbRequest {
         return null;
     }
 
- public static void shouldDeleteAfterPayment() {
+    public static void shouldDeleteAfterPayment() {
+        String dbUrl = System.getProperty("database.url");
+        String dbUser = System.getProperty("database.name");
+        String dbPassword = System.getProperty("database.password");
+
         val clearPayment = "DELETE FROM payment_entity";
         val clearPaymentWithCredit = "DELETE FROM credit_request_entity";
         val clearOrder = "DELETE FROM order_entity";
@@ -50,14 +63,13 @@ public class DbRequest {
 
         try (
                 val conn = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/app", "app", "pass"
-                )
-                ) {
+                        dbUrl, dbUser, dbPassword)
+        ) {
             runner.update(conn, clearOrder);
             runner.update(conn, clearPayment);
             runner.update(conn, clearPaymentWithCredit);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
- }
+    }
 }

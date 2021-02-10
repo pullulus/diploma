@@ -25,7 +25,8 @@ public class BuyWithCardTest {
 
     @BeforeEach
     void shouldOpen() {
-        open("http://localhost:8080");
+        String sutUrl = System.getProperty("sut.url");
+        open(sutUrl);
     }
 
     @AfterEach

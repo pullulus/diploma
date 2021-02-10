@@ -14,8 +14,10 @@
    _вариант 2_ (с подключением к PostgreSQL)`java -Dspring.datasource.url=jdbc:postgresql://localhost:5432/postgres -Dspring.datasource.username=postgres -Dspring.datasource.password=mysecretpassword -jar ./artifacts/aqa-shop.jar`
 1. После того как приложение запустится, в следующей соседней вкладке терминала запустить тесты командой:
 
-    _вариант 1_ (с подключением к MySQL) `gradlew test -Dproperty.url=database_jdbc:mysql://localhost:3306/app -Dproperty.name=database_app -Dproperty.password=database_pass`
+    _вариант 1_ (с подключением к MySQL) `gradlew test -Ddatabase.url=jdbc:mysql://localhost:3306/app -Ddatabase.name=app -Ddatabase.password=pass`
     
-    _вариант 2_ (с подключением к PostgreSQL) `gradlew test -Dproperty.url=database_jdbc:postgresql:localhost:5432/postgres -Dproperty.name=database_postgres -Dproperty.password=database_mysecretpassword`
+    _вариант 2_ (с подключением к PostgreSQL) `gradlew test -Ddatabase.url=jdbc:postgresql:localhost:5432/postgres -Ddatabase.name=postgres -Ddatabase.password=mysecretpassword`
+
+Отчеты о проделанной работе можно посмотреть здесь - [Report](https://github.com/pullulus/diploma/blob/master/documents/Report.md), [Summary](https://github.com/pullulus/diploma/blob/master/documents/Summary.md) 
 
 
